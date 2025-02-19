@@ -11,16 +11,20 @@ source:
 
 build:
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 1
+  
+  # noarch: only build on linux64
+  skip: True # [not linux64]
 
 requirements:
   host:
-    - python {{ python_min }}
+    - python 
     - pip
+    - wheel
     - setuptools
   run:
-    - python >={{ python_min }}
+    - python
     - typing_inspect
     - typing-extensions
 
@@ -31,14 +35,22 @@ test:
     - pip check
   requires:
     - pip
-    - python {{ python_min }}
 
 about:
   home: https://pyre-check.org
   summary: Type system extensions for use with the pyre type checker
+  description: Type system extensions for use with the pyre type checker
+  doc_url: https://pyre-check.org/
+  dev_url: https://github.com/facebook/pyre-check/tree/main
   license: MIT
   license_file: LICENSE
+  license_family: MIT
 
 extra:
+  anaconda-services:
+    ref: https://anaconda.zendesk.com/agent/tickets/49522
+    reason: Dependency for vllm
+    recipe-maintainers:
+      - bkreider
   recipe-maintainers:
     - jan-janssen
