@@ -10,17 +10,18 @@ source:
   sha256: 5396715f14ea56c4d5fd0a88c57ca7e44faa468f905909edd7de4ad90ed85e55
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
-  number: 1
+  number: 0
+  skip: true  # [py<310]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
-    - python {{ python_min }}
+    - python
     - pip
     - setuptools
+    - wheel
   run:
-    - python >={{ python_min }}
+    - python
     - typing_inspect
     - typing-extensions
 
@@ -29,16 +30,27 @@ test:
     - pyre_extensions
   commands:
     - pip check
+    - python -m unittest pyre_extensions.tests.basic_test pyre_extensions.tests.safe_json_test
   requires:
     - pip
-    - python {{ python_min }}
 
 about:
   home: https://pyre-check.org
-  summary: Type system extensions for use with the pyre type checker
+  summary: Type system extensions for use with the Pyre type checker
+  description: |
+    Pyre Extensions is a module that enhances Python's standard typing system with
+    features supported by the Pyre typechecker. It provides utilities including
+    none_throws for explicit Optional handling, ParameterSpecification for typing
+    decorators that preserve callable signatures, and a type-safe way to parse
+    JSON through the safe_json module, which validates JSON input against expected
+    type specifications rather than returning untyped data.
   license: MIT
+  license_family: MIT
   license_file: LICENSE
+  doc_url: https://pyre-check.org
+  dev_url: https://github.com/facebook/pyre-check/tree/main/pyre_extensions
 
 extra:
   recipe-maintainers:
     - jan-janssen
+    - bkreider
