@@ -30,6 +30,7 @@ test:
     - pyre_extensions
   commands:
     - pip check
+    - python -m unittest pyre_extensions.tests.basic_test pyre_extensions.tests.safe_json_test
   requires:
     - pip
 
@@ -46,7 +47,7 @@ about:
   license: MIT
   license_family: MIT
   license_file: LICENSE
-  doc_url: https://pyre-check.org/
+  doc_url: https://pyre-check.org
   dev_url: https://github.com/facebook/pyre-check/tree/main/pyre_extensions
 
 extra:
